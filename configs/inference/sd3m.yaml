@@ -1,0 +1,55 @@
+pretrained_path: "stabilityai/stable-diffusion-3-medium-diffusers"
+model_type: "sd35"
+dtype: "bf16"
+image_resolution: 1024
+
+mode: "distilled"
+
+lora_paths:
+  - "/path/to/sd3m_cold_start_ckpt/checkpoint-15000/generator_ema.pt"
+  - "/path/to/sd3m_rtdmd_ckpt/checkpoint-1000/generator_ema.pt"
+lora_rank: 32
+lora_alpha: 64
+
+num_steps: 4
+denoising_step_list: [1000, 750, 500, 250]
+cps_eta: 0.9
+
+guidance_scale: 1.0
+
+seed: 42
+batch_size: 4
+
+eval_prompt_source: "dataset"
+dataset: "drawbench"
+dataset_path: "dataset"
+
+output_dir: "./inference_outputs/sd3m"
+
+eval_reward: true
+preload_reward_models: true
+num_media_images: 64
+reward_fn:
+  pickscore: 1.0
+  aesthetic: 1.0
+  hpsv2: 1.0
+  clipscore: 1.0
+  geneval: 1.0
+  geneval2: 1.0
+  ocr: 1.0
+  hpsv3: 1.0
+  imagereward: 1.0
+reward_dataset_map:
+  pickscore: drawbench
+  aesthetic: drawbench
+  clipscore: drawbench
+  hpsv2: drawbench
+  hpsv3: hpsv3
+  imagereward: drawbench
+  geneval: geneval
+  geneval2: geneval2
+  ocr: ocr
+reward_ckpt_path: "/path/to/reward_ckpts"
+
+distributed: false
+strategy: "fsdp"

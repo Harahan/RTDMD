@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "rtdmd"
+version = "0.1.0"
+description = "Reward-Tilted Distribution Matching Distillation for few-step flow-matching text-to-image models"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "diffusers>=0.32.0",
+    "transformers>=4.40.0",
+    "accelerate>=1.0.0",
+    "flash-attn>=2.5.0",
+    "pyyaml>=6.0",
+    "wandb>=0.16.0",
+    "numpy>=1.24.0",
+    "Pillow>=10.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["rtdmd*"]

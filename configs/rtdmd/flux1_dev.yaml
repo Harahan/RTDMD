@@ -1,0 +1,206 @@
+model:
+  pretrained_path: "black-forest-labs/FLUX.1-dev"
+  model_type: "flux"
+  gradient_checkpointing: true
+  dtype: "bf16"
+  image_resolution: 512
+  generator_lora:
+    enabled: true
+    rank: 32
+    lora_alpha: 64
+    target_modules:
+      - "attn.to_q"
+      - "attn.to_k"
+      - "attn.to_v"
+      - "attn.to_out.0"
+      - "attn.add_q_proj"
+      - "attn.add_k_proj"
+      - "attn.add_v_proj"
+      - "attn.to_add_out"
+    init_lora_weights: "gaussian"
+    load_path: "/path/to/flux1_dev_cold_start_ckpt/checkpoint-15000/generator_ema.pt"
+    merge_before_training: true
+  fake_score_lora:
+    enabled: true
+    rank: 32
+    lora_alpha: 64
+    target_modules:
+      - "attn.to_q"
+      - "attn.to_k"
+      - "attn.to_v"
+      - "attn.to_out.0"
+      - "attn.add_q_proj"
+      - "attn.add_k_proj"
+      - "attn.add_v_proj"
+      - "attn.to_add_out"
+    init_lora_weights: "gaussian"
+    load_path: "/path/to/flux1_dev_cold_start_ckpt/checkpoint-15000/fake_score_net.pt"
+    merge_before_training: true
+
+grpo:
+  sampling_mode: "dmd"
+  num_steps: 4
+  denoising_step_list: [1000, 750, 500, 250]
+  noise_level: 0.9
+  sde_type: "cps"
+  guidance_scale: 1.0
+  same_latent: false
+
+  eval_num_steps: 4
+  eval_guidance_scale: 1.0
+  eval_noise_level: 0.9
+  eval_sde_type: "cps"
+  eval_freq: 50
+  save_freq: 50
+
+  clip_range: 1.0e-5
+  clip_range_lt: 1.0e-5
+  clip_range_gt: 1.0e-5
+  beta: 0.0
+  adv_clip_max: 5.0
+  timestep_fraction: 0.99
+  num_inner_epochs: 1
+  cfg_in_training: false
+  max_grad_norm: 1.0
+
+  learning_rate: 3.0e-6
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 1.0e-4
+  adam_epsilon: 1.0e-8
+  weight_advantages: true
+
+  reward_fn:
+    "clipscore": 1.0
+    "hpsv2": 1.0
+    "pickscore": 1.0
+    "geneval": 1.0
+  reward_ckpt_path: "/path/to/reward_ckpts"
+  per_prompt_stat_tracking: true
+  per_prompt_global_std: true
+
+  num_batches_per_epoch: 16
+  sample_batch_size: 3
+  num_image_per_prompt: 24
+  test_batch_size: 16
+  vae_decode_batch_size: 4
+
+  train_batch_size: 3
+  gradient_accumulation_steps: 16
+  num_epochs: 100000
+
+  use_ema: true
+  ema_decay: 0.9
+  ema_update_interval: 8
+
+  log_num_groups: 0
+
+  step_selection:
+    enabled: true
+    range_start: 0
+    range_end: 2
+    num_train_steps: 2
+
+  last_step_loss:
+    enabled: true
+    loss_type: "ac_dmd"
+    train_steps: [-1]
+    weight: 0.001
+    real_guidance_scale_min: 3.5
+    real_guidance_scale_max: 3.5
+    fake_guidance_scale: 1.0
+    gradient_normalization: true
+    min_step: 20
+    max_step: 980
+    timestep_sampling: "logit_normal"
+    logit_mean: 0.0
+    logit_std: 1.0
+    fake_min_step: 0
+    fake_max_step: 999
+    fake_timestep_sampling: "uniform"
+    fake_logit_mean: 0.0
+    fake_logit_std: 1.0
+    fake_score_batch_size: 4
+    ac_start_mode: "next_sigma"
+    ac_end_timestep: 1000.0
+    ac_timestep_offset: 10.0
+    ac_min_step: 20
+    ac_max_step: 980
+    ac_target_formula_move_scale_out: true
+    ac_fake_loss_weight_clamp_min: 0.0
+    ac_fake_loss_weight_clamp_max: 10.0
+    ac_fake_train_guidance_scale: 1.0
+    ac_consistency_enabled: false
+    ac_consistency_weight: 0.01
+    ac_consistency_epsilon_timestep: 200.0
+    ac_consistency_num_steps: 1
+    ac_consistency_use_two_sample_unbiased: true
+    ac_consistency_stopgrad_transitions: true
+    bp_enabled: true
+    bp_use_training_reward_fn: true
+    bp_reward_margin: 3.0
+    bp_grad_scale: 1.0e-4
+    bp_only_deterministic: true
+    bp_batch_size: 2
+
+dmd:
+  num_inference_steps: 4
+  denoising_step_list: [1000, 750, 500, 250]
+  generator_scheduler: "cps"
+  cps_eta: 0.9
+
+solver:
+  fake_score:
+    lr: 1.0e-6
+    warmup_steps: 0
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1.0e-8
+    weight_decay: 0.0
+    max_grad_norm: 1.0
+
+train:
+  seed: 42
+  autocast_dtype: "bf16"
+
+distributed:
+  strategy: "fsdp"
+  fsdp_sharding: "full_shard"
+
+logging:
+  project: "rtdmd"
+  run_name: "flux1_dev_rtdmd"
+  entity: ""
+  tags: ["flux1_dev", "rtdmd"]
+  enabled: true
+
+eval:
+  enabled: true
+  eval_prompt_source: dataset
+  dataset_path: dataset
+  dataset: drawbench
+  num_media_images: 64
+  eval_seed: 42
+  reward_fn:
+    pickscore: 1.0
+    aesthetic: 1.0
+    hpsv2: 1.0
+    clipscore: 1.0
+    geneval: 1.0
+    geneval2: 1.0
+    ocr: 1.0
+    hpsv3: 1.0
+    imagereward: 1.0
+  reward_dataset_map:
+    pickscore: drawbench
+    aesthetic: drawbench
+    clipscore: drawbench
+    hpsv2: drawbench
+    hpsv3: hpsv3
+    imagereward: drawbench
+    geneval: geneval
+    geneval2: geneval2
+    ocr: ocr
+
+prompt_path: "dataset/geneval"
+output_dir: "./outputs/flux1_dev_rtdmd"

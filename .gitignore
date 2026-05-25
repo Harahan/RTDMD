@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Outputs
+outputs/
+baseline_outputs/
+wandb/
+inference_outputs/
+
+# Checkpoints
+*.pt
+*.safetensors
+!configs/**
+
+# Logs
+*.log
+/tmp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Worktree
+.claude/
+
+# Local OCR caches
+.paddleocr/

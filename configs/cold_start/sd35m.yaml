@@ -1,0 +1,158 @@
+model:
+  pretrained_path: "stabilityai/stable-diffusion-3.5-medium"
+  model_type: "sd35"
+  gradient_checkpointing: true
+  dtype: "bf16"
+  image_resolution: 512
+  generator_lora:
+    enabled: true
+    rank: 32
+    lora_alpha: 64
+    target_modules:
+      - "attn.to_q"
+      - "attn.to_k"
+      - "attn.to_v"
+      - "attn.to_out.0"
+      - "attn.add_k_proj"
+      - "attn.add_v_proj"
+      - "attn.add_q_proj"
+      - "attn.to_add_out"
+    init_lora_weights: "gaussian"
+    load_path: ""
+  fake_score_lora:
+    enabled: true
+    rank: 32
+    lora_alpha: 64
+    target_modules:
+      - "attn.to_q"
+      - "attn.to_k"
+      - "attn.to_v"
+      - "attn.to_out.0"
+      - "attn.add_k_proj"
+      - "attn.add_v_proj"
+      - "attn.add_q_proj"
+      - "attn.to_add_out"
+    init_lora_weights: "gaussian"
+    load_path: ""
+
+dmd:
+  num_inference_steps: 4
+  min_step: 20
+  max_step: 980
+  num_train_timesteps: 1000
+  real_guidance_scale_min: 4.5
+  real_guidance_scale_max: 4.5
+  fake_guidance_scale: 1.0
+  fake_update_ratio: 10
+  gradient_normalization: true
+  fake_timestep_sampling: "logit_normal"
+  logit_mean: 0.0
+  logit_std: 1.0
+  random_stop_idx: true
+  denoising_step_list: [1000, 750, 500, 250]
+  generator_scheduler: cps
+  cps_eta: 0.9
+  fake_min_step: 0
+  fake_max_step: 999
+  dmd_timestep_sampling: "uniform"
+  dmd_logit_mean: 0.0
+  dmd_logit_std: 1.0
+
+ac_dmd:
+  enabled: true
+  start_mode: "next_sigma"
+  boundary_sigma_index: 2
+  end_timestep: 1000.0
+  timestep_offset: 10.0
+  all_include_terminal_when_no_random_stop: true
+  min_renoise_step: 20
+  max_renoise_step: 980
+  target_formula_move_scale_out: true
+  fake_loss_weight_clamp_min: 0.0
+  fake_loss_weight_clamp_max: 10.0
+  consistency_enabled: true
+  consistency_weight: 1.0e-2
+  consistency_epsilon_timestep: 200.0
+  consistency_num_steps: 1
+  consistency_use_two_sample_unbiased: true
+  consistency_stopgrad_transitions: true
+
+solver:
+  generator:
+    lr: 3.0e-5
+    warmup_steps: 0
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1.0e-8
+    weight_decay: 0.0
+    max_grad_norm: 1.0
+  fake_score:
+    lr: 3.0e-5
+    warmup_steps: 0
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1.0e-8
+    weight_decay: 0.0
+    max_grad_norm: 1.0
+
+train:
+  total_steps: 100000
+  save_interval: 5000
+  log_interval: 1
+  seed: 42
+  batch_size: 9
+  gradient_accumulation_steps: 1
+  autocast_dtype: "bf16"
+  resume_from: ""
+  
+  use_ema: true
+  ema_decay: 0.99
+  ema_every: 1
+
+distributed:
+  strategy: "fsdp"
+  fsdp_sharding: "full_shard"
+
+logging:
+  project: "rtdmd"
+  run_name: "sd35m-ac-dmd"
+  entity: ""
+  tags: ["sd35m", "cold_start"]
+  enabled: true
+
+eval:
+  enabled: true
+  eval_interval: 1000
+  eval_prompt_source: "dataset"
+  
+  dataset: "drawbench"
+  dataset_path: "dataset"
+  reward_fn:
+    imagereward: 1.0
+    pickscore: 1.0
+    aesthetic: 1.0
+    clipscore: 1.0
+    hpsv2: 1.0
+    hpsv3: 1.0
+    geneval: 1.0
+    geneval2: 1.0
+    ocr: 1.0
+  reward_dataset_map:
+    imagereward: drawbench
+    pickscore: drawbench
+    aesthetic: drawbench
+    clipscore: drawbench
+    hpsv2: drawbench
+    hpsv3: hpsv3
+    geneval: geneval
+    ocr: ocr
+    geneval2: geneval2
+  reward_ckpt_path: "/path/to/reward_ckpts"
+  eval_num_steps: 4
+  eval_guidance_scale: 1.0
+  eval_batch_size: 16
+  num_media_images: 64
+  eval_seed: 42
+
+prompt_path: "dataset/pickscore"
+output_dir: "./outputs/sd35m_cold_start"
