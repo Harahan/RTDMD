@@ -404,6 +404,15 @@ scored offline as part of GRPO advantages.
 ## 📄 Citation
 
 ```bibtex
+@misc{huang2026reinforcingfewstepgeneratorsrewardtilted,
+      title={Reinforcing Few-step Generators via Reward-Tilted Distribution Matching}, 
+      author={Yushi Huang and Xiangxin Zhou and Ruoyu Wang and Chi Zhang and Jun Zhang and Tianyu Pang},
+      year={2026},
+      eprint={2605.26108},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2605.26108}, 
+}
 ```
 
 <!-- BibTeX will be filled in once the paper is on arXiv. -->
