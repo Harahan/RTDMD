@@ -8,7 +8,7 @@
 
 <p><b>Reward-Tilted DMD &nbsp;·&nbsp; Ambient-Consistent Distillation &nbsp;·&nbsp; Hybrid Policy Gradient</b></p>
 
-[![Paper](https://img.shields.io/badge/paper-arXiv-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](<TODO: arxiv link>)
+[![Paper](https://img.shields.io/badge/paper-arXiv-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2605.26108)
 [![Github](https://img.shields.io/badge/Harahan%2FRTDMD-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Harahan/RTDMD)
 [![Hugging Face Collection](https://img.shields.io/badge/RTDMD_Collection-fcd022?style=for-the-badge&logo=huggingface&logoColor=000)](https://huggingface.co/collections/Harahan/rtdmd)
 
