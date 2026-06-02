@@ -34,6 +34,7 @@
 ## 📑 Table of Contents
 
 - [📖 Abstract](#-abstract)
+- [📰 News](#-news)
 - [🍭 Method Overview](#-method-overview)
 - [📊 Main Results](#-main-results)
 - [✅ TODO](#-todo)
@@ -79,6 +80,19 @@ rewards.
     </td>
   </tr>
 </table>
+
+---
+
+## 📰 News
+
+- **June 2, 2026**: Released stronger and larger RTDMD checkpoints:
+  [FLUX.2-klein 9B](https://huggingface.co/Harahan/FLUX2-9B-RTDMD) and
+  [FLUX.1 dev 12B](https://huggingface.co/Harahan/FLUX1-12B-RTDMD).
+- **May 26, 2026**: Released the [paper](https://arxiv.org/abs/2605.26108),
+  [code](https://github.com/Harahan/RTDMD), and the first public RTDMD
+  checkpoints:
+  [SD3.5 Medium](https://huggingface.co/Harahan/SD35M-RTDMD) and
+  [FLUX.2-klein 4B](https://huggingface.co/Harahan/FLUX2-4B-RTDMD).
 
 ---
 
@@ -146,7 +160,7 @@ including **+0.37 ImageReward**, **+0.57 Aesthetic**, **+1.33 PickScore**,
 
 ## ✅ TODO
 
-- [ ] Release more RTDMD checkpoints (FLUX.2 9B and FLUX.1 dev) on the [RTDMD HF collection](<TODO: huggingface collection URL>)
+- [x] Release more RTDMD checkpoints (FLUX.2 9B and FLUX.1 dev) on the [RTDMD HF collection](https://huggingface.co/collections/Harahan/rtdmd)
 
 ---
 
