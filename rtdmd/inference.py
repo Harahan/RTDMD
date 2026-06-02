@@ -477,10 +477,23 @@ class RTDMDInference:
         self.transformer.requires_grad_(False)
         self.transformer.eval()
 
-        # Derive latent geometry.
-        self.latent_channels = self.transformer.config.in_channels
+        # Derive latent geometry. Match trainer setup exactly:
+        # - FLUX.1 transformer.in_channels is the packed token dimension
+        #   (16 VAE channels x 2x2 packing), while the denoising loop operates
+        #   on unpacked VAE latents. Packing happens inside predict_noise_flux.
+        # - FLUX.2-klein uses an additional 2x2 latent patchification before
+        #   transformer tokens, so its latent H/W is divided by an extra factor
+        #   of 2 and transformer.in_channels is the latent-domain channel count.
         vae_scale_factor = 2 ** (len(self.vae.config.block_out_channels) - 1)
-        latent_divisor = vae_scale_factor * 2 if self._is_flux2_klein else vae_scale_factor
+        if self._is_flux2_klein:
+            self.latent_channels = self.transformer.config.in_channels
+            latent_divisor = vae_scale_factor * 2
+        elif self._is_flux:
+            self.latent_channels = int(self.vae.config.latent_channels)
+            latent_divisor = vae_scale_factor
+        else:
+            self.latent_channels = self.transformer.config.in_channels
+            latent_divisor = vae_scale_factor
         if cfg.image_resolution % latent_divisor != 0:
             raise ValueError(
                 f"image_resolution={cfg.image_resolution} must be divisible by "
