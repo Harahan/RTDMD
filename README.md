@@ -19,10 +19,10 @@
 
 <div align="center">
 
-[Yushi Huang](https://harahan.github.io/)<sup>1, 2,</sup>\*<sup>†</sup>, [Xiangxin Zhou](https://zhouxiangxin1998.github.io/)<sup>2,</sup>\*, Ruoyu Wang<sup>2, 3,</sup>\*<sup>†</sup>, [Chi Zhang](https://icoz69.github.io/)<sup>3</sup>, [Jun Zhang](https://eejzhang.people.ust.hk/)<sup>1</sup>,[Tianyu Pang](https://p2333.github.io/)<sup>2,</sup>‡
+[Yushi Huang](https://harahan.github.io/)<sup>1, 2,</sup>\*<sup>†</sup>, [Xiangxin Zhou](https://zhouxiangxin1998.github.io/)<sup>1,</sup>\*, Ruoyu Wang<sup>1, 3,</sup>\*<sup>†</sup>, [Chi Zhang](https://icoz69.github.io/)<sup>3</sup>, [Jun Zhang](https://eejzhang.people.ust.hk/)<sup>2</sup>,[Tianyu Pang](https://p2333.github.io/)<sup>1,</sup>‡
 
-<sup>1</sup>The Hong Kong University of Science and Technology &nbsp;&nbsp;
-<sup>2</sup>Tencent Hunyuan &nbsp;&nbsp;
+<sup>1</sup>Tencent Hunyuan &nbsp;&nbsp;
+<sup>2</sup>The Hong Kong University of Science and Technology &nbsp;&nbsp;
 <sup>3</sup>Westlake University
 
 \* Equal contribution &nbsp;·&nbsp; † Work done during internship at Tencent Hunyuan &nbsp;·&nbsp; ‡ Corresponding author
